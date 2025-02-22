@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etiqueta de Aprovação</title>
+    <link rel="stylesheet" href="/styles/etiquetas.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <input type="text" id="cliente" placeholder="Cliente">
+            <input type="text" id="descricao" placeholder="Descrição">
+            <input type="text" id="medida" placeholder="Medida">
+            <input type="number" id="peso" placeholder="Peso Bruto (kg)">
+            <input type="number" id="tara" placeholder="Tara (kg)">
+            <input type="text" id="operador" placeholder="Operador">
+            <button onclick="gerarEtiqueta()">Gerar Etiqueta</button>
+            <button onclick="imprimirEtiqueta()">Imprimir</button>
+            <button onclick="limparCampos()">Limpar</button>
+        </div>
+        <div class="etiqueta" id="etiqueta">
+            <p><strong>Cliente:</strong> <span id="etq-cliente"></span></p>
+            <p><strong>Descrição:</strong> <span id="etq-descricao"></span></p>
+            <p><strong>Medida:</strong> <span id="etq-medida"></span></p>
+            <p><strong>Peso Bruto:</strong> <span id="etq-peso"></span> KG</p>
+            <p><strong>Peso Líquido:</strong> <span id="etq-liquido"></span> KG</p>
+            <p><strong>Operador:</strong> <span id="etq-operador"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function gerarEtiqueta() {
+            let cliente = document.getElementById("cliente").value.toUpperCase();
+            let descricao = document.getElementById("descricao").value.toUpperCase();
+            let medida = document.getElementById("medida").value.toUpperCase();
+            let peso = parseFloat(document.getElementById("peso").value) || 0;
+            let tara = parseFloat(document.getElementById("tara").value) || 0;
+            let operador = document.getElementById("operador").value.toUpperCase();
+            let liquido = peso - tara;
+            
+            document.getElementById("etq-cliente").textContent = cliente;
+            document.getElementById("etq-descricao").textContent = descricao;
+            document.getElementById("etq-medida").textContent = medida;
+            document.getElementById("etq-peso").textContent = peso.toFixed(1);
+            document.getElementById("etq-liquido").textContent = liquido.toFixed(1);
+            document.getElementById("etq-operador").textContent = operador;
+        }
+
+        function imprimirEtiqueta() {
+            window.print();
+        }
+
+        function limparCampos() {
+            document.getElementById("cliente").value = "";
+            document.getElementById("descricao").value = "";
+            document.getElementById("medida").value = "";
+            document.getElementById("peso").value = "";
+            document.getElementById("tara").value = "";
+            document.getElementById("operador").value = "";
+            
+            document.getElementById("etq-cliente").textContent = "";
+            document.getElementById("etq-descricao").textContent = "";
+            document.getElementById("etq-medida").textContent = "";
+            document.getElementById("etq-peso").textContent = "";
+            document.getElementById("etq-liquido").textContent = "";
+            document.getElementById("etq-operador").textContent = "";
+        }
+    </script>
+</body>
+</html>

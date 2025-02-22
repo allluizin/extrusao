@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiradas por Hora - TECHFLEX</title>
+    <link rel="stylesheet" href="/styles/tiradas.css">
+    <script>
+        function calcularTiradas() {
+            let velocidadePuxador = parseFloat(document.getElementById("puxador").value);
+            let gramatura = parseFloat(document.getElementById("gramatura").value);
+            let kiloPorBobina = parseFloat(document.getElementById("kiloBobina").value);
+            let quantidadeTiradas = parseInt(document.getElementById("quantidadeTiradas").value);
+            let inicioHora = parseInt(document.getElementById("inicioHora").value);
+            let inicioMinuto = parseInt(document.getElementById("inicioMinuto").value);
+
+            if (isNaN(velocidadePuxador) || isNaN(gramatura) || isNaN(kiloPorBobina) || isNaN(quantidadeTiradas) || isNaN(inicioHora) || isNaN(inicioMinuto)) {
+                document.getElementById("resultado").innerHTML = "Por favor, insira valores válidos.";
+                return;
+            }
+
+            let kgPorHora = ((velocidadePuxador * gramatura * 60 * 2)/1000)/2;
+            let tempoPorBobina = (kiloPorBobina / kgPorHora) * 60;
+            let horarios = "";
+            
+            for (let i = 0; i < quantidadeTiradas; i++) {
+                inicioMinuto += tempoPorBobina;
+                while (inicioMinuto >= 60) {
+                    inicioMinuto -= 60;
+                    inicioHora++;
+                }
+                while (inicioHora >= 24){
+                    inicioHora -= 24;
+                }
+
+                horarios += `<p>Tirada ${i + 1}: ${inicioHora.toString().padStart(2, '0')}:${Math.floor(inicioMinuto).toString().padStart(2, '0')}</p>`;
+            }
+            
+            let tempoMedioHoras = Math.floor(tempoPorBobina / 60);
+            let tempoMedioMinutos = Math.floor(tempoPorBobina % 60);
+            let tempoMedioTexto = `Tempo médio por bobina: ${tempoMedioHoras}h ${tempoMedioMinutos}min`;
+            
+            document.getElementById("resultado").innerHTML = `<h2>Horários das Tiradas:</h2>${horarios}<h3>${tempoMedioTexto}</h3>`;
+        }
+        
+        function limparCampos() {
+            document.getElementById("form").reset();
+            document.getElementById("resultado").innerHTML = "";
+        }
+        
+        function imprimirResultados() {
+            window.print();
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("form").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    calcularTiradas();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>Tiradas por Hora</h1>
+            <form id="form">
+                <label>Velocidade do Puxador (m/min):</label>
+                <input type="number" id="puxador">
+                
+                <label>Gramatura (g/m²):</label>
+                <input type="number" id="gramatura">
+                
+                <label>Kg por Bobina:</label>
+                <input type="number" id="kiloBobina">
+                
+                <label>Quantidade de Tiradas:</label>
+                <input type="number" id="quantidadeTiradas">
+                
+                <label>Hora de Início:</label>
+                <input type="number" id="inicioHora" min="0" max="23">
+                
+                <label>Minuto de Início:</label>
+                <input type="number" id="inicioMinuto" min="0" max="59">
+                
+                <div class="buttons">
+                    <button type="button" onclick="calcularTiradas()">Calcular</button>
+                    <button type="button" onclick="imprimirResultados()">Imprimir</button>
+                    <button type="button" onclick="limparCampos()">Limpar</button>
+                </div>
+            </form>
+        </div>
+        <div class="result-container">
+            <h2>Resultado:</h2>
+            <div id="resultado"></div>
+        </div>
+    </div>
+</body>
+</html>

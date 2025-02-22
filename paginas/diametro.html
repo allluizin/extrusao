@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diâmetro da Bobina - TECHFLEX</title>
+    <link rel="stylesheet" href="/styles/diametro.css">
+    <script>
+        function calcularDiametro() {
+            let peso = parseFloat(document.getElementById("peso").value);
+            let largura = parseFloat(document.getElementById("largura").value);
+            
+            if (isNaN(peso) || isNaN(largura) || largura === 0) {
+                document.getElementById("resultado").innerHTML = "Por favor, insira valores válidos.";
+                return;
+            }
+            
+            let calculo = (peso * 1384 / largura) + 92.156;
+            let diametro = Math.sqrt(calculo).toFixed(2);
+            
+            document.getElementById("resultado").innerHTML = `Raio da Bobina: <strong>${diametro} mm</strong>`;
+        }
+
+        function limparCampos() {
+            document.getElementById("form").reset();
+            document.getElementById("resultado").innerHTML = "";
+        }
+
+        function imprimirResultados() {
+            window.print();
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("form").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    calcularDiametro();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>Diâmetro da Bobina</h1>
+            <form id="form">
+                <label>Peso (kg):</label>
+                <input type="number" id="peso">
+                
+                <label>Largura (mm):</label>
+                <input type="number" id="largura">
+                
+                <div class="buttons">
+                    <button type="button" onclick="calcularDiametro()">Calcular</button>
+                    <button type="button" onclick="imprimirResultados()">Imprimir</button>
+                    <button type="button" onclick="limparCampos()">Limpar</button>
+                </div>
+            </form>
+        </div>
+        <div class="result-container">
+            <h2>Resultado:</h2>
+            <div id="resultado"></div>
+        </div>
+    </div>
+</body>
+</html>
