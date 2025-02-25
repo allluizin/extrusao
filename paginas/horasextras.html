@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caclulo Horas Extras</title>
+    <link rel="stylesheet" href="../styles/horasextras.css">
+    <script>
+        function calcularHoras(){
+            let salario = parseFloat(document.getElementById("salario").value);
+            let porcentagem = parseInt(document.getElementById("porcentagem").value);
+            let cargahoraria = parseInt(document.getElementById("cargahoraria").value);
+            let quantidade = parseFloat(document.getElementById("quantidade").value);
+
+            if (isNaN(salario) || isNaN(porcentagem) || isNaN(cargahoraria) || isNaN(quantidade)){
+                document.getElementById("resultado").innerHTML = "Voce esqueceu algum dado.";
+            }
+
+            let valorHora = salario / cargahoraria;
+            let valorSemPorcentagem = (valorHora * quantidade);
+            let valorComPorcentagem = valorSemPorcentagem * (porcentagem / 100);
+            let valor = valorSemPorcentagem + valorComPorcentagem;
+            
+
+            document.getElementById("resultado").innerHTML = `<h2>Valor a receber de horas extras:</h2>${valor.toFixed(2)}`;
+
+        }
+        function limparCampos(){
+            document.getElementById("form").reset();
+            document.getElementById("resultado").innerHTML = "";
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("form").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    calcularHoras();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>Tiradas por Hora</h1>
+            <form id="form">
+                <label>Salário bruto:</label>
+                <input type="number" id="salario">
+                
+                <label>% da hora extra:</label>
+                <input type="number" id="porcentagem">
+                
+                <label>Carga horária mensal:</label>
+                <input type="number" id="cargahoraria">
+                
+                <label>Quantidade de Horas extras:</label>
+                <input type="number" id="quantidade">
+                
+                <div class="buttons">
+                    <button type="button" onclick="calcularHoras()">Calcular</button>
+                    <button type="button" onclick="limparCampos()">Limpar</button>
+                </div>
+            </form>
+        </div>
+        <div class="result-container">
+            <h2>Resultado:</h2>
+            <div id="resultado"></div>
+        </div>
+    </div>
+</body>
+</html>
