@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divisao de bobinas</title>
+    <link rel="stylesheet" href="../styles/divisaobobinas.css">
+    <script>
+        function calcularDivisao() {
+    let largura = parseFloat(document.getElementById("largura").value);
+    let quantidade = parseFloat(document.getElementById("quantidade").value);
+    let numerobobinas = parseFloat(document.getElementById("numerobobinas").value);
+    let pigmento = parseFloat(document.getElementById("pigmento").value) || 0;
+
+    if (isNaN(largura) || isNaN(quantidade) || isNaN(numerobobinas)) {
+        alert("Preencha todos os campos corretamente!");
+        return;
+    }
+
+    let pesoPorBobina = quantidade / numerobobinas;
+    let diametroBobina = Math.sqrt((pesoPorBobina * 1384 / largura) + 92.156);
+
+    document.getElementById("diametroBobina").textContent = diametroBobina.toFixed(2);
+    document.getElementById("pesoPorBobina").textContent = pesoPorBobina.toFixed(2);
+}
+
+function limparCampos() {
+    document.getElementById("form").reset();
+    document.getElementById("diametroBobina").textContent = "-";
+    document.getElementById("pesoPorBobina").textContent = "-";
+}
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>Divisão de OP em bobinas</h1>
+            <form id="form">
+                <label>Largura do filme (mm):</label>
+                <input type="number" id="largura">
+
+                <label>Quantidade da OP (KG):</label>
+                <input type="number" id="quantidade">
+
+                <label>Números de bobinas:</label>
+                <input type="number" id="numerobobinas">
+
+                <label>Pigmento:</label>
+                <input type="number" id="pigmento">
+
+                <div class="buttons">
+                    <button type="button" onclick="calcularDivisao()">Calcular</button>
+                    <button type="button" onclick="">Limpar</button>
+                </div>
+            </form>
+        </div>
+        <div class="result-container">
+            <h2>Resultado:</h2>
+            <div class="resultado">
+                <p><strong>Diâmetro da Bobina:</strong> <span id="diametroBobina">-</span> cm</p>
+                <p><strong>Peso da Bobina:</strong> <span id="pesoPorBobina">-</span> kg</p>
+            </div>
+        </div> 
+    </div>
+</body>
+</html>
