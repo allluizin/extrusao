@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle Diário de Aparas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            text-align: center;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #007bff;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #007bff;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        #outroMotivo {
+            display: none;
+        }
+        .total-apara {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Controle Diário de Aparas</h2>
+        <label>Categoria da Apara:</label>
+        <select id="categoria" onchange="verificarOutro()">
+            <option value="Setup">Setup</option>
+            <option value="Troca de Tela">Troca de Tela</option>
+            <option value="Falha no Tratamento">Falha no Tratamento</option>
+            <option value="Limpeza de Bobina">Limpeza de Bobina</option>
+            <option value="Outros">Outros</option>
+        </select>
+        <input type="text" id="outroMotivo" placeholder="Digite o motivo" style="display:none;">
+        <label>Quantidade (kg):</label>
+        <input type="number" id="quantidade" placeholder="Digite a quantidade em kg">
+        <button onclick="adicionarApara()">Adicionar</button>
+        <button onclick="exportarParaExcel()">Salvar em Excel</button>
+        
+        <div class="total-apara">Total de Aparas: <span id="totalApara">0</span> kg</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Categoria</th>
+                    <th>Quantidade (kg)</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaAparas"></tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2">Total</th>
+                    <th id="totalTabela">0 kg</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <script>
+        let aparas = [];
+
+        function verificarOutro() {
+            let categoria = document.getElementById("categoria").value;
+            let outroMotivo = document.getElementById("outroMotivo");
+            if (categoria === "Outros") {
+                outroMotivo.style.display = "block";
+            } else {
+                outroMotivo.style.display = "none";
+                outroMotivo.value = "";
+            }
+        }
+
+        function adicionarApara() {
+            let categoria = document.getElementById("categoria").value;
+            let outroMotivo = document.getElementById("outroMotivo").value;
+            let quantidade = document.getElementById("quantidade").value;
+            let data = new Date().toLocaleDateString();
+
+            if (!quantidade || quantidade <= 0) {
+                alert("Insira um valor válido de kg.");
+                return;
+            }
+
+            if (categoria === "Outros" && outroMotivo.trim() === "") {
+                alert("Digite o motivo da apara.");
+                return;
+            }
+
+            let categoriaFinal = categoria === "Outros" ? outroMotivo : categoria;
+            let novaApara = { data, categoria: categoriaFinal, quantidade: parseFloat(quantidade) };
+            aparas.push(novaApara);
+            atualizarTabela();
+            document.getElementById("quantidade").value = "";
+            document.getElementById("quantidade").focus();
+        }
+
+        function atualizarTabela() {
+            let tabela = document.getElementById("tabelaAparas");
+            let totalApara = document.getElementById("totalApara");
+            let totalTabela = document.getElementById("totalTabela");
+            
+            tabela.innerHTML = "";
+            let total = 0;
+            aparas.forEach(apara => {
+                let linha = `<tr>
+                    <td>${apara.data}</td>
+                    <td>${apara.categoria}</td>
+                    <td>${apara.quantidade} kg</td>
+                </tr>`;
+                tabela.innerHTML += linha;
+                total += apara.quantidade;
+            });
+            totalApara.textContent = total;
+            totalTabela.textContent = total + " kg";
+        }
+
+        function exportarParaExcel() {
+            let ws = XLSX.utils.json_to_sheet(aparas);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Aparas");
+            let dataAtual = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `controle_aparas_${dataAtual}.xlsx`);
+        }
+
+        document.getElementById("quantidade").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                adicionarApara();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -6,6 +6,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin: 0;
 }
 .container {
     display: flex;
@@ -13,48 +14,46 @@ body {
     color: #0a2a5e;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 900px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 600px;
 }
-.form-container {
+.inputs, .resultado {
     flex: 1;
-    padding-right: 20px;
+    padding: 10px;
 }
-.result-container {
-    flex: 1;
-    border-left: 2px solid #ccc;
-    padding-left: 20px;
-}
-h1 {
-    text-align: center;
-    width: 100%;
-}
-label {
+.inputs label {
     display: block;
-    margin: 10px 0 5px;
     font-weight: bold;
+    margin-top: 10px;
+}
+.materiaPrima {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
 }
 input {
-    width: 100%;
-    padding: 10px;
+    flex: 1;
+    padding: 8px;
     border: 1px solid #007bff;
     border-radius: 5px;
-    font-size: 16px;
     outline: none;
 }
-.buttons {
-    margin-top: 20px;
-}
 button {
-    background: #0056b3;
+    width: 100%;
+    background: #007bff;
     color: white;
-    padding: 10px 15px;
     border: none;
+    padding: 10px;
+    margin-top: 15px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin-right: 10px;
 }
 button:hover {
-    background: #003f7f;
+    background: #0056b3;
+}
+.resultado {
+    background: #e9f2ff;
+    border-radius: 5px;
+    padding: 15px;
 }

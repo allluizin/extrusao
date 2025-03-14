@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitação de Resina para o Fim de Semana</title>
+    <link rel="stylesheet" href="../styles/calcfds.css">k
+</head>
+<body>
+    <div class="container">
+        <div class="inputs">
+            <label>Taxa de Produção (kg/h)</label>
+            <input type="number" id="producaoHora" placeholder="Ex: 180" required>
+            
+            <label>Hora de Início (Sexta-feira)</label>
+            <input type="time" id="horaAtual" required>
+            
+            <label>Hora de Reabertura (Segunda-feira)</label>
+            <input type="time" id="horaReabertura" required>
+            
+            <div id="materiasPrimas">
+                <div class="materiaPrima">
+                    <input type="text" placeholder="Nome da Matéria-Prima" class="nomeMP">
+                    <input type="number" placeholder="Porcentagem (%)" class="percentualMP">
+                </div>
+            </div>
+            
+            <button onclick="adicionarMateriaPrima()">+</button>
+            <button onclick="calcular()">Calcular</button>
+        </div>
+        <div class="resultado" id="resultado">
+            <h3>Resultado</h3>
+            <p>Aguardando cálculo...</p>
+        </div>
+    </div>
+
+    <script>
+        function adicionarMateriaPrima() {
+            let div = document.createElement("div");
+            div.classList.add("materiaPrima");
+            div.innerHTML = `
+                <input type="text" placeholder="Nome da Matéria-Prima" class="nomeMP">
+                <input type="number" placeholder="Porcentagem (%)" class="percentualMP">
+            `;
+            document.getElementById("materiasPrimas").appendChild(div);
+        }
+        
+        function calcular() {
+            let producaoHora = parseFloat(document.getElementById("producaoHora").value);
+            let horaAtual = document.getElementById("horaAtual").value;
+            let horaReabertura = document.getElementById("horaReabertura").value;
+            
+            if (!horaAtual || !horaReabertura || isNaN(producaoHora)) {
+                document.getElementById("resultado").innerHTML = "<h3>Resultado</h3><p style='color: red;'>Preencha todos os campos corretamente.</p>";
+                return;
+            }
+            
+            let [h1, m1] = horaAtual.split(":").map(Number);
+            let [h2, m2] = horaReabertura.split(":").map(Number);
+            
+            let minutosRestantes = ((48 * 60) - (h1 * 60 + m1)) + (h2 * 60 + m2);
+            let horasRestantes = minutosRestantes / 60;
+            let quantidadeNecessaria = horasRestantes * producaoHora;
+            
+            let materiasPrimas = document.querySelectorAll(".materiaPrima");
+            let resultadoHTML = `<h3>Resultado</h3><p><strong>Produção necessária:</strong> ${quantidadeNecessaria.toFixed(2)} kg</p>`;
+            
+            materiasPrimas.forEach(mp => {
+                let nome = mp.querySelector(".nomeMP").value;
+                let percentual = parseFloat(mp.querySelector(".percentualMP").value) / 100;
+                
+                if (nome && !isNaN(percentual)) {
+                    let quantidade = quantidadeNecessaria * percentual;
+                    resultadoHTML += `<p><strong>${nome}:</strong> ${quantidade.toFixed(2)} kg</p>`;
+                }
+            });
+            
+            document.getElementById("resultado").innerHTML = resultadoHTML;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo de Matéria-Prima Faltante</title>
+    <link rel="stylesheet" href="../styles/criacaoOP.css">
+</head>
+<body>
+    <div class="container">
+        <div class="inputs">
+            <label>Quantidade Total da OP (kg)</label>
+            <input type="number" id="totalOP" placeholder="Ex: 8000" required>
+            
+            <label>Quantidade Produzida (kg)</label>
+            <input type="number" id="produzido" placeholder="Ex: 3639.1" required>
+            
+            <div id="materiasPrimas">
+                <div class="materiaPrima">
+                    <input type="text" placeholder="Nome da Matéria-Prima" class="nomeMP">
+                    <input type="number" placeholder="Porcentagem (%)" class="percentualMP">
+                </div>
+                <div class="materiaPrima">
+                    <input type="text" placeholder="Nome da Matéria-Prima" class="nomeMP">
+                    <input type="number" placeholder="Porcentagem (%)" class="percentualMP">
+                </div>
+                <div class="materiaPrima">
+                    <input type="text" placeholder="Nome da Matéria-Prima" class="nomeMP">
+                    <input type="number" placeholder="Porcentagem (%)" class="percentualMP">
+                </div>
+            </div>
+            
+            <button onclick="adicionarMateriaPrima()">+</button>
+            <button onclick="calcular()">Calcular</button>
+        </div>
+        <div class="resultado" id="resultado">
+            <h3>Resultado</h3>
+            <p>Aguardando cálculo...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                calcular();
+            }
+        });
+        
+        function adicionarMateriaPrima() {
+            let div = document.createElement("div");
+            div.classList.add("materiaPrima");
+            div.innerHTML = `
+                <input type="text" placeholder="Nome da Matéria-Prima" class="nomeMP">
+                <input type="number" placeholder="Porcentagem (%)" class="percentualMP">
+            `;
+            document.getElementById("materiasPrimas").appendChild(div);
+        }
+        
+        function calcular() {
+            let totalOP = parseFloat(document.getElementById("totalOP").value);
+            let produzido = parseFloat(document.getElementById("produzido").value);
+            let faltante = totalOP - produzido;
+            
+            if (isNaN(totalOP) || isNaN(produzido) || faltante < 0) {
+                document.getElementById("resultado").innerHTML = "<h3>Resultado</h3><p style='color: red;'>Preencha todos os campos corretamente.</p>";
+                return;
+            }
+            
+            let materiasPrimas = document.querySelectorAll(".materiaPrima");
+            let resultadoHTML = `<h3>Resultado</h3><p><strong>Faltando produzir:</strong> ${faltante.toFixed(2)} kg</p>`;
+            
+            materiasPrimas.forEach(mp => {
+                let nome = mp.querySelector(".nomeMP").value;
+                let percentual = parseFloat(mp.querySelector(".percentualMP").value) / 100;
+                
+                if (nome && !isNaN(percentual)) {
+                    let quantidade = faltante * percentual;
+                    resultadoHTML += `<p><strong>${nome}:</strong> ${quantidade.toFixed(2)} kg</p>`;
+                }
+            });
+            
+            document.getElementById("resultado").innerHTML = resultadoHTML;
+        }
+    </script>
+</body>
+</html>
