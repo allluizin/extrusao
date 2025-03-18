@@ -57,3 +57,8 @@ button:hover {
     border-radius: 5px;
     padding: 15px;
 }
+@media (max-width: 500px) {
+    .materiaPrima {
+        flex-direction: column;
+    }
+}

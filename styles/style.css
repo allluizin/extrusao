@@ -56,3 +56,23 @@ body {
 .btn:hover {
     background: #003f7f;
 }
+@media (max-width: 600px) {
+    .menu {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .menu a {
+        width: 90%;
+        text-align: center;
+    }
+
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
