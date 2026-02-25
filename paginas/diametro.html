@@ -5,6 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diâmetro da Bobina - TECHFLEX</title>
     <link rel="stylesheet" href="../styles/diametro.css">
+    <style>
+        @media print {
+    @page {
+        size: 6cm 6cm;
+        margin: 0;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        width: 6cm;
+        height: 6cm;
+    }
+
+    .etiqueta {
+        width: 6cm;
+        height: 6cm;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 12px; /* ajuste se necessário */
+    }
+}
+    </style>
     <script>
         function calcularDiametro() {
             let peso = parseFloat(document.getElementById("peso").value);
